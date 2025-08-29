@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { IoNotifications } from "react-icons/io5";
 import { RxAvatar } from "react-icons/rx";
 import { IoExitOutline } from "react-icons/io5";
-
+import { signOut } from 'aws-amplify/auth';
 
 
 
@@ -21,6 +21,15 @@ const Header = () => {
     { key: 'finca', label: 'Panel Finca', to: '/panel-finca' },
     { key: 'lote',  label: 'Panel Lote',  to: '/panel-lote'  },
     ];
+
+    const handleSignOut = async () => {
+        try {
+            await signOut();
+            navigate('/login');
+        } catch (error) {
+            console.error('Error signing out: ', error);
+        }
+    }
 
   return (
     <div className='flex items-center justify-between p-4'>
@@ -41,7 +50,7 @@ const Header = () => {
                 <IoNotifications className='h-6 w-6 text-gray-600 cursor-pointer' />
                 <div className='absolute -top-1 -right-1 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full'>3</div>
             </div>
-            <IoExitOutline className='h-6 w-6 text-gray-600 cursor-pointer mx-4' onClick={() => navigate('/login')} />
+            <IoExitOutline className='h-6 w-6 text-gray-600 cursor-pointer mx-4' onClick={handleSignOut} />
         </div>
 
 

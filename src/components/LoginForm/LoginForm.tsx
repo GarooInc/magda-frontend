@@ -4,7 +4,7 @@ import { IoMdEyeOff } from "react-icons/io";
 import Toast from '../Toast/Toast';
 import { signIn } from '../../lib/auth';
 // import { signOut } from 'aws-amplify/auth';
-// import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom'; 
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -13,7 +13,7 @@ const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [notification, setNotification] = useState<{ message: string; type: string } | null>(null);
 
-    // const navigate = useNavigate();
+  const navigate = useNavigate();
 
 
   const showNotification = (message: string, type: string) => {
@@ -60,7 +60,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 
       setTimeout(() => {
         clearNotification();
-        // navigate('/chat');
+        navigate('/panel-finca');
       }, 1000);
     } catch (error: unknown) {
       let errorMessage = 'Error desconocido';
