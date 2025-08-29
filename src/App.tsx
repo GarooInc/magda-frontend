@@ -1,12 +1,16 @@
 
 import './App.css'
+import AppRouter from './routes/AppRouter'
+import { BrowserRouter as Router } from 'react-router-dom';
+
 
 function App() {
 
   return (
-    <div className="App h-[100vh] bg-black text-white w-full">
-    </div>
-  )
+    <Router>
+      <AppRouter />
+    </Router>
+  );
 }
 
 export default App
