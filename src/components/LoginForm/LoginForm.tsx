@@ -11,8 +11,7 @@ const LoginForm = () => {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [notification, setNotification] = useState<{ message: string; type: string } | null>(null);
-
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
 
   const showNotification = (message: string, type: string) => {

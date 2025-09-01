@@ -22,9 +22,13 @@ const Header = () => {
     ];
 
     const handleSignOut = async () => {
-        await signOut();
-        navigate('/login');
-    };
+        try {
+            await signOut();
+            navigate('/login');
+        } catch (error) {
+            console.error('Error signing out: ', error);
+        }
+    }
 
   return (
     <div className='flex items-center justify-between p-4'>
