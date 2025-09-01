@@ -3,7 +3,6 @@ import { IoEye } from "react-icons/io5";
 import { IoMdEyeOff } from "react-icons/io";
 import Toast from '../Toast/Toast';
 import { signIn } from '../../lib/auth';
-// import { signOut } from 'aws-amplify/auth';
 import { useNavigate } from 'react-router-dom'; 
 
 const LoginForm = () => {
@@ -12,7 +11,6 @@ const LoginForm = () => {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [notification, setNotification] = useState<{ message: string; type: string } | null>(null);
-
   const navigate = useNavigate();
 
 

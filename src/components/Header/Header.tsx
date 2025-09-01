@@ -2,7 +2,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'; 
 import { IoNotifications } from "react-icons/io5";
 import { IoExitOutline } from "react-icons/io5";
-import { signOut } from 'aws-amplify/auth';
+import { signOut } from '../../lib/auth';
 
 
 

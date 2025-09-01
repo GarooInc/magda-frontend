@@ -11,16 +11,15 @@ const ORIGINAL_EXP_KEY = 'original_exp';
 const COGNITO_TOKEN_KEY = 'cognitoToken'; // si lo usas en otra parte, lo dejamos por compat
 
 // ---- Helpers ----
-function isTokenValidFromStorage(): boolean {
+export function isTokenValidFromStorage(): boolean {
   const expirationTime = localStorage.getItem(ORIGINAL_EXP_KEY);
-  if (!expirationTime) return false;
-  const currentTime = Math.floor(Date.now() / 1000);
-  const tokenExpirationTime = Number.parseInt(expirationTime, 10);
-  return Number.isFinite(tokenExpirationTime) && currentTime < tokenExpirationTime;
+  if (!expirationTime) return false
+  else {
+    return true;
+  }
 }
 
-// ---- API pública (misma firma que tu código original) ----
-
+// ---- API pública  ----
 export const signUp = (email: string, password: string): Promise<SignUpOutput> => {
   // Amplify requiere username. Usamos el correo como username por simplicidad.
   return amplifySignUp({
@@ -47,13 +46,12 @@ export const signIn = async (email: string, password: string) => {
     localStorage.setItem(ORIGINAL_EXP_KEY, String(exp));
   }
 
-  // Guardar el propio token si lo necesitas en otras capas:
   const idJwt = session.tokens?.idToken?.toString();
   if (idJwt) {
     localStorage.setItem(COGNITO_TOKEN_KEY, idJwt);
   }
 
-  return session; // similar a lo que devolvías antes
+  return session; 
 };
 
 export const signOut = async (): Promise<void> => {
@@ -71,7 +69,6 @@ export const checkSession = async () => {
     throw new Error('No user found');
   }
 
-  // Validación con la expiración guardada (se mantiene tu lógica original)
   if (!isTokenValidFromStorage()) {
     throw new Error('Session expired');
   }
