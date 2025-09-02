@@ -1,4 +1,6 @@
 import React from 'react'
+import { Link } from "react-router-dom";
+
 
 
 interface CellComponentProps {
@@ -11,13 +13,15 @@ interface CellComponentProps {
 
 const CellComponent = ({ value, color, showNumbers, nombre, clickeable }: CellComponentProps) => {
   return (
-    <div
-      className={`rounded-xl flex items-center justify-center font-semibold text-white text-xl ${value <= -0.5 ?  "" : ""} ${clickeable ? "cursor-pointer hover:scale-105 transition-transform duration-200" : ""}`}
-      style={{ backgroundColor: color , aspectRatio: "1 / 1" }}
-      title={`${nombre} - Lotes: ${value}`}
-    >
+    <Link to={`/panel-lote/${nombre}`}>
+      <div
+        className={`rounded-xl flex items-center justify-center font-semibold text-white text-xl ${value <= -0.5 ?  "" : ""} ${clickeable ? "cursor-pointer hover:scale-105 transition-transform duration-200" : ""}`}
+        style={{ backgroundColor: color , aspectRatio: "1 / 1" }}
+        title={`${nombre} - Lotes: ${value}`}
+      >
       {showNumbers ? <span>{value}</span> : null}
     </div>
+    </Link>
   )
 }
 

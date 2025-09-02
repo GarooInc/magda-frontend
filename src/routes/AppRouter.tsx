@@ -1,13 +1,14 @@
+// src/router/AppRouter.jsx
 import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "../pages/Login";
 import FincaDashboard from "../pages/FincaDashboard";
-import LoteDashboard from "../pages/LoteDashboard";
 import PrivateRoute from "./PrivateRoute";
 import { isTokenValidFromStorage } from "../lib/auth";
+import LoteDashboard from "../pages/LoteDashboard";
+import LoteDetail from "../pages/LoteDetail";
 
 const AppRouter = () => {
   const alreadyLoggedIn = isTokenValidFromStorage();
-  console.log("User is logged in:", alreadyLoggedIn);
 
   return (
     <Routes>
@@ -16,24 +17,16 @@ const AppRouter = () => {
         element={alreadyLoggedIn ? <Navigate to="/panel-finca" replace /> : <Login />}
       />
 
-      <Route
-        path="/panel-finca"
-        element={
-          <PrivateRoute>
-            <FincaDashboard />
-          </PrivateRoute>
-        }
-      />
-      <Route
-        path="/panel-lote"
-        element={
-          <PrivateRoute>
-            <LoteDashboard />
-          </PrivateRoute>
-        }
-      />
+      <Route element={<PrivateRoute />}>
+        <Route path="/panel-finca" element={<FincaDashboard />} />
 
-      <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route path="/panel-lote" >
+          <Route index element={<LoteDashboard />} />               {/* /panel-lote */}
+          <Route path=":loteId" element={<LoteDetail />} />    {/* /panel-lote/123 */}
+        </Route>
+      </Route>
+
+      <Route path="*" element={<Navigate to={alreadyLoggedIn ? "/panel-finca" : "/login"} replace />} />
     </Routes>
   );
 };
