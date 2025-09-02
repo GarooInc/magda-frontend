@@ -4,37 +4,42 @@ import CellComponent from "../CellComponent/CellComponent";
 
 interface Finca {
   nombre: string;
-  cantidad_lotes: number;
+  numero: number;
 }
 
 interface GridSquaresProps {
   data: Finca[];
   columns?: number;
   showNumbers?: boolean;
-  thresholds: number[];
-  colors: string[];
+  clickeable?: boolean;
 }
 
-const GridSquares = ({ data, columns = 5, showNumbers = false, thresholds, colors }: GridSquaresProps) => {
-  const getColor = (v: number) => {
-    for (let i = thresholds.length - 1; i >= 0; i--) {
-      if (v >= thresholds[i]) return colors[i];
-    }
+const GridSquares = ({ data, columns = 5, showNumbers = false, clickeable = false }: GridSquaresProps) => {
+
+  const thresholds = [0.2, 0, -0.5, -0.5];
+  const colors = ["#106b47", "#7ddf8f",  "#f97316", "#e53935"];
+
+  const getColor = (v: number): string => {
+    if (v >= thresholds[0]) return colors[0];
+    if (v > thresholds[1] && v < thresholds[0]) return colors[1];
+    if (v <= thresholds[1] && v > thresholds[2]) return colors[2];
+    if (v <= thresholds[2]) return colors[3];
     return colors[0];
   };
 
   return (
     <div
-      className="grid gap-3"
+      className="grid gap-2"
       style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}
     >
       {data.map((finca, i) => (
         <CellComponent
           key={i}
-          value={finca.cantidad_lotes}
-          color={getColor(finca.cantidad_lotes)}
+          value={finca.numero}
+          color={getColor(finca.numero)}
           showNumbers={showNumbers}
           nombre={finca.nombre}
+          clickeable={clickeable}
         />
       ))}
     </div>

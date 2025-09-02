@@ -1,16 +1,18 @@
 import React from 'react'
 
+
 interface CellComponentProps {
   value: number;
   color: string;
   showNumbers: boolean;
   nombre: string;
+  clickeable?: boolean;
 }
 
-const CellComponent = ({ value, color, showNumbers, nombre }: CellComponentProps) => {
+const CellComponent = ({ value, color, showNumbers, nombre, clickeable }: CellComponentProps) => {
   return (
     <div
-      className="rounded-xl flex items-center justify-center font-semibold text-white text-sm"
+      className={`rounded-xl flex items-center justify-center font-semibold text-white text-xl ${value <= -0.5 ?  "" : ""} ${clickeable ? "cursor-pointer hover:scale-105 transition-transform duration-200" : ""}`}
       style={{ backgroundColor: color , aspectRatio: "1 / 1" }}
       title={`${nombre} - Lotes: ${value}`}
     >
