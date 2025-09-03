@@ -17,9 +17,13 @@ const CloseIcon = () => (
   </svg>
 );
 
+
+
+type ToastType = 'error' | 'success' | 'warning' | 'info';
+
 interface ToastProps {
   message: string;
-  type?: string;
+  type?: ToastType;
   onClose: () => void;
   duration?: number;
 }

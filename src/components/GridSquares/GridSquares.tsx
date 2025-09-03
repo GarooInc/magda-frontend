@@ -1,5 +1,4 @@
 
-import React from "react";
 import CellComponent from "../CellComponent/CellComponent";
 
 interface Finca {

@@ -1,4 +1,3 @@
-import React from "react";
 import GridSquares from "../GridSquares/GridSquares";
 import Legend from "../LegendComponent/LegendComponent";
 

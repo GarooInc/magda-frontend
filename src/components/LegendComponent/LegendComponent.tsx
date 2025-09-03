@@ -1,4 +1,3 @@
-import React from 'react'
 
 const LegendComponent = ({ labels, colors, fecha }: { labels: string[]; colors: string[]; fecha?: string }) => {
   return (

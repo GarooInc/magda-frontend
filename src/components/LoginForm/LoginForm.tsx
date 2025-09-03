@@ -1,20 +1,28 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { IoEye } from "react-icons/io5";
 import { IoMdEyeOff } from "react-icons/io";
 import Toast from '../Toast/Toast';
 import { signIn } from '../../lib/auth';
 import { useNavigate } from 'react-router-dom'; 
 
+type ToastType = 'error' | 'success' | 'warning' | 'info';
+
+type Notification = {
+  message: string;
+  type: ToastType; 
+};
+
 const LoginForm = () => {
+  
   const [showPassword, setShowPassword] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [notification, setNotification] = useState<{ message: string; type: string } | null>(null);
+  const [notification, setNotification] = useState<Notification | null>(null);
   const navigate = useNavigate();
 
 
-  const showNotification = (message: string, type: string) => {
+  const showNotification = (message: string, type: ToastType) => {
     setNotification({ message: message, type: type });
   };
 

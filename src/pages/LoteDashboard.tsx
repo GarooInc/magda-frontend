@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import Header from '../components/Header/Header'
 import GridComponent from '../components/GridComponent/GridComponent'
 import { RiArrowDownSLine } from 'react-icons/ri'

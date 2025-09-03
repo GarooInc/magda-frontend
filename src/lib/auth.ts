@@ -33,14 +33,10 @@ export const signUp = (email: string, password: string): Promise<SignUpOutput> =
 };
 
 export const signIn = async (email: string, password: string) => {
-  // Inicia sesión con Amplify
-  const result = await amplifySignIn({ username: email, password });
+  await amplifySignIn({ username: email, password });
 
-  // Si hay nextStep (MFA, confirmación, etc.), puedes manejarlo aquí según tu UX.
-  // Para mantener compatibilidad con tu API previa, devolvemos la "session" de Amplify.
   const session = await fetchAuthSession();
 
-  // Guardar exp del ID token (número UNIX en segundos)
   const exp = session.tokens?.idToken?.payload?.exp as number | undefined;
   if (typeof exp === 'number') {
     localStorage.setItem(ORIGINAL_EXP_KEY, String(exp));
