@@ -6,9 +6,10 @@ interface GridComponentProps {
   titulo?: string;
   clickeable?: boolean;
   fecha?: string;
+  thresholds?: number[];
 }
 
-const GridComponent = ({data, titulo, clickeable, fecha}: GridComponentProps) => {
+const GridComponent = ({data, titulo, clickeable, fecha, thresholds}: GridComponentProps) => {
 
   return (
     <div className="bg-white text-gray-900 shadow-2xl p-10 rounded-2xl">
@@ -20,6 +21,7 @@ const GridComponent = ({data, titulo, clickeable, fecha}: GridComponentProps) =>
           columns={10}
           showNumbers
           clickeable={clickeable}
+          thresholds ={thresholds}
         />
 
         <Legend

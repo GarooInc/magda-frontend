@@ -15,7 +15,7 @@ const CellComponent = ({ value, color, showNumbers, nombre, clickeable }: CellCo
     clickeable ? (
       <Link to={`/panel-lote/${nombre}`}>
         <div
-          className={`rounded-xl flex items-center justify-center font-semibold text-white text-xl ${value <= -0.5 ?  "" : ""} cursor-pointer hover:scale-105 transition-transform duration-200`}
+          className={`rounded-xl flex items-center justify-center font-semibold text-white text-xl cursor-pointer hover:scale-105 transition-transform duration-200`}
           style={{ backgroundColor: color , aspectRatio: "1 / 1" }}
           title={`${nombre} - Lotes: ${value}`}
         >
@@ -24,7 +24,7 @@ const CellComponent = ({ value, color, showNumbers, nombre, clickeable }: CellCo
       </Link>
     ) : (
       <div
-        className={`rounded-xl flex items-center justify-center font-semibold text-white text-xl ${value <= -0.5 ?  "" : ""}`}
+        className={`rounded-xl flex items-center justify-center font-semibold text-white text-xl`}
         style={{ backgroundColor: color , aspectRatio: "1 / 1" }}
         title={`${nombre} - Lotes: ${value}`}
       >
