@@ -92,3 +92,25 @@ export async function getDetallePoligono(token: string, idPoligono: string, inte
   }
 }
 
+
+export async function getAlertas() {
+  try {
+    const response = await fetch(`https://n8n.srv853599.hstgr.cloud/webhook/63efc370-69d6-426e-a0c3-83c920cb4afa`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error ${response.status}: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    console.log("Fetched alertas:", data);
+    return data;
+  } catch (error) {
+    console.error("Error al hacer fetch:", error);
+    throw error;
+  }
+}
