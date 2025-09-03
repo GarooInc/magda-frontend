@@ -22,7 +22,7 @@ const Header = () => {
   return (
     <div className='flex items-center justify-between p-4'>
       <div className='flex items-center gap-20 justify-center'>
-        <img src="src/assets/images/logos/logomagda.png" className="w-40" alt='logo' />
+        <img src="assets/images/logos/logomagda.png" className="w-40" alt='logo' />
         <div className='flex gap-6'>
           {MENU_ITEMS.map(item => (
             <NavLink

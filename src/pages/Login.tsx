@@ -13,7 +13,7 @@ function Login (){
                     </div>
                     <div className='w-full lg:w-1/2 h-screen relative z-10'>
                         <div className='w-full md:justify-start justify-center items-center flex absolute top-2 p-2'>
-                            <img src="src/assets/images/logos/logomagda.png" className="w-40" alt='logo' />
+                            <img src="/assets/images/logos/logomagda.png" className="w-40" alt='logo' />
                         </div>
                         <div className='flex flex-col items-center justify-center w-full gap-4 h-full bg-white'>
                             <div className='flex flex-col items-center justify-center  gap-4 w-full'>
