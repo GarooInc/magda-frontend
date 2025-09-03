@@ -55,7 +55,7 @@ export const signIn = async (email: string, password: string) => {
 };
 
 export const signOut = async (): Promise<void> => {
-  await amplifySignOut(); // cierra sesión en Cognito
+  await amplifySignOut(); 
   localStorage.removeItem(ORIGINAL_EXP_KEY);
   localStorage.removeItem(COGNITO_TOKEN_KEY);
 };

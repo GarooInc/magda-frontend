@@ -67,3 +67,28 @@ export async function getDiferenciaLotesMalos(token: string, temporada: number, 
     throw error;
   }
 }
+
+export async function getDetallePoligono(token: string, idPoligono: string, intervalo: number) {
+    console.log("Fetching with token:", token);
+  try {
+    const response = await fetch(`https://magdalena-garoo.koyeb.app/analysis/polygon-detail?id=${idPoligono}&intervalo=${intervalo}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error ${response.status}: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    console.log("Fetched data:", data);
+    return data;
+  } catch (error) {
+    console.error("Error al hacer fetch:", error);
+    throw error;
+  }
+}
+

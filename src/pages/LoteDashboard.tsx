@@ -24,6 +24,7 @@ const LoteDashboard = () => {
   const loadData = async (token: string, finca: string, temporada: typeof selectedTemporada) => {
     setLoading(true)
     setError(null)
+    localStorage.setItem('selectedTemporada', temporadas[temporada].toString())
     try {
       const resp = await getDiferenciaLotesMalos(token, temporadas[temporada], finca)
       setData(resp)
@@ -73,6 +74,11 @@ const LoteDashboard = () => {
     [data]
   )
 
+  const handleSelectedDate = (date: 'Medición Actual' | 'Medición Anterior') => {
+    setSelectedTemporada(date)
+    localStorage.setItem('selectedTemporada', date)
+  }
+
   return (
     <div className='min-h-[100dvh] bg-white p-4'>
       <Header />
@@ -87,7 +93,7 @@ const LoteDashboard = () => {
             </div>
             <ul tabIndex={0} className='dropdown-content bg-[#EBE8E8] text-black mt-2 menu rounded-box z-10 w-56 p-2 shadow-sm'>
               {(['Medición Actual', 'Medición Anterior'] as const).map((t, i) => (
-                <li key={i} className='hover:bg-[#200085] hover:text-white rounded-lg' onClick={() => setSelectedTemporada(t)}>
+                <li key={i} className='hover:bg-[#200085] hover:text-white rounded-lg' onClick={() => handleSelectedDate(t)}>
                   <a>{t}</a>
                 </li>
               ))}
