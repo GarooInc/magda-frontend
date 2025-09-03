@@ -21,7 +21,7 @@ const GridSquares = ({ data, columns = 5, showNumbers = false, clickeable = fals
 
   const getColor = (v: number): string => {
     if (v >= thresholds[0]) return colors[0];
-    if (v > thresholds[1] && v < thresholds[0]) return colors[1];
+    if (v >= thresholds[1] && v < thresholds[0]) return colors[1];
     if (v <= thresholds[1] && v > thresholds[2]) return colors[2];
     if (v <= thresholds[2]) return colors[3];
     return colors[0];

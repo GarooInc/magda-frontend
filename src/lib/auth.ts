@@ -8,7 +8,7 @@ import {
 } from 'aws-amplify/auth';
 
 const ORIGINAL_EXP_KEY = 'original_exp';
-const COGNITO_TOKEN_KEY = 'cognitoToken'; // si lo usas en otra parte, lo dejamos por compat
+const COGNITO_TOKEN_KEY = 'cognitoToken'; 
 
 // ---- Helpers ----
 export function isTokenValidFromStorage(): boolean {
