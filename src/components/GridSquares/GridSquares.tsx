@@ -11,19 +11,26 @@ interface GridSquaresProps {
   columns?: number;
   showNumbers?: boolean;
   clickeable?: boolean;
+  thresholds?: number[];
 }
 
-const GridSquares = ({ data, columns = 5, showNumbers = false, clickeable = false }: GridSquaresProps) => {
+const GridSquares = ({ data, columns = 5, showNumbers = false, clickeable = false, thresholds }: GridSquaresProps) => {
 
-  const thresholds = [0.2, 0, -0.5, -0.5];
+  const thresholdsitem = thresholds || [-0.5,0, 0.5, 1];
   const colors = ["#106b47", "#7ddf8f",  "#f97316", "#e53935"];
 
-  const getColor = (v: number): string => {
-    if (v >= thresholds[0]) return colors[0];
-    if (v >= thresholds[1] && v < thresholds[0]) return colors[1];
-    if (v <= thresholds[1] && v > thresholds[2]) return colors[2];
-    if (v <= thresholds[2]) return colors[3];
-    return colors[0];
+  const getColorLote = (v: number): string => {
+    if (v < thresholdsitem[0]) return colors[3]; //crítico
+    if (v < thresholdsitem[1]) return colors[2]; //malo
+    if (v < thresholdsitem[2]) return colors[1]; //medio
+    return colors[0]; //bueno
+  };
+
+  const getColorFinca = (v: number): string => {
+    if (v > thresholdsitem[0]) return colors[0];
+    if (v > thresholdsitem[1]) return colors[1];
+    if (v > thresholdsitem[2]) return colors[2];
+    return colors[3];
   };
 
   return (
@@ -35,7 +42,7 @@ const GridSquares = ({ data, columns = 5, showNumbers = false, clickeable = fals
         <CellComponent
           key={i}
           value={finca.numero}
-          color={getColor(finca.numero)}
+          color={ thresholds ? getColorFinca(finca.numero) : getColorLote(finca.numero) }
           showNumbers={showNumbers}
           nombre={finca.nombre}
           clickeable={clickeable}
