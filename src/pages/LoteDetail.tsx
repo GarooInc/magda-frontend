@@ -84,7 +84,7 @@ const LoteDetail = () => {
               exit={{ opacity: 0, y: -8 }}
             >
               <div className='justify-between flex w-full items-center'>
-                <img src="/src/assets/images/logos/logomagda.png" className='h-16' />
+                <img src="/assets/images/logos/logomagda.png" className='h-16' />
                 <IoCloseCircle className='h-10 w-10 text-[#200085] cursor-pointer' onClick={handleClose} />
               </div>
 
