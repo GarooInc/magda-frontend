@@ -7,9 +7,10 @@ interface GridComponentProps {
   clickeable?: boolean;
   fecha?: string;
   thresholds?: number[];
+  labels?: string[];
 }
 
-const GridComponent = ({data, titulo, clickeable, fecha, thresholds}: GridComponentProps) => {
+const GridComponent = ({data, titulo, clickeable, fecha, thresholds, labels}: GridComponentProps) => {
 
   return (
     <div className="bg-white text-gray-900 shadow-2xl p-10 rounded-2xl">
@@ -25,7 +26,7 @@ const GridComponent = ({data, titulo, clickeable, fecha, thresholds}: GridCompon
         />
 
         <Legend
-          labels={["Bueno", "Medio", "Mal", "Crítico"]}
+          labels={labels || ["Bueno", "Medio", "Malo", "Crítico"]}
           colors={["#106b47", "#7ddf8f", "#f97316", "#e53935"]}
           fecha={fecha}
         />

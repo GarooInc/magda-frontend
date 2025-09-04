@@ -102,6 +102,7 @@ const FincaDashboard = () => {
                 data={transformedData}  
                 fecha={data?.fecha_toma} 
                 thresholds={[0,5,10]}
+                labels={["Bueno (0 a 4)", "Medio (5 a 9)", "Malo (10 a 14)", "Crítico (15+)"]}
                 />
               </motion.div>
             )}

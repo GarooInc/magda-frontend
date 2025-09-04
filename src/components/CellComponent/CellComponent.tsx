@@ -19,7 +19,7 @@ const CellComponent = ({ value, color, showNumbers, nombre, clickeable }: CellCo
           style={{ backgroundColor: color , aspectRatio: "1 / 1" }}
           title={`${nombre} - Lotes: ${value}`}
         >
-        {showNumbers ? <span>{value.toFixed(2)}</span> : null}
+        {showNumbers ? <span>{value.toFixed(4)}</span> : null}
       </div>
       </Link>
     ) : (

@@ -154,6 +154,7 @@ const LoteDashboard = () => {
                   titulo={selectedFinca ?? undefined}
                   clickeable
                   fecha={data?.fecha_toma}
+                  labels={["Bueno (1)", "Medio (0 a 0.5)", "Malo (0 a -0.5)", "Crítico (< -0.5)"]}
                 />
               </motion.div>
             )}
