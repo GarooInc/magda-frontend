@@ -15,7 +15,7 @@ const CellComponent = ({ value, color, showNumbers, nombre, clickeable }: CellCo
     clickeable ? (
       <Link to={`/panel-lote/${nombre}`}>
         <div
-          className={`rounded-xl flex items-center justify-center font-semibold text-white text-xl cursor-pointer hover:scale-105 transition-transform duration-200`}
+          className={`rounded-xl flex items-center justify-center font-semibold text-white  xl:text-xl text-sm cursor-pointer hover:scale-105 transition-transform duration-200`}
           style={{ backgroundColor: color , aspectRatio: "1 / 1" }}
         >
         {showNumbers ? <span>{value.toFixed(4)}</span> : null}

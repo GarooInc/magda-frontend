@@ -12,7 +12,7 @@ const LoteDetail = () => {
   const [error, setError] = useState<string | null>(null)
   const [data, setData] = useState<{
     poligono: { finca: string; lote: string; region: string; admin: string; area: number; },
-    data: { ndvi_metricas?: { [key: string]: number } | null; ndwi_mean?: number | null },
+    data: { ndvi_metricas?: { [key: string]: number } | null; ndwi_mean?: number | null ; img_ndwi: string; img_ndvi: string; },
     fecha_toma?: string
   } | null>(null)
 
@@ -33,6 +33,11 @@ const LoteDetail = () => {
       })
       .finally(() => setLoading(false));
   }, [loteId]);
+
+  const handleViewImage = (url : string) => {
+    console.log('Viewing image:', url);
+    window.open(url, '_blank');
+  }
 
   return (
     <div className='bg-white h-[100vh] flex justify-center items-center'>
@@ -108,7 +113,9 @@ const LoteDetail = () => {
                 <div className='flex flex-col w-full gap-4'>
                   <div className='flex justify-between w-full'>
                     <span className='font-semibold text-[#FE4C00] text-xl'>NDVI</span>
-                    <button className='btn bg-[#EBE8E8] border-0 active:bg-[#FE4C00] hover:bg-[#FE4C00] hover:text-white rounded-xl text-black font-poppins shadow-none'>
+                    <button className='btn bg-[#EBE8E8] border-0 active:bg-[#FE4C00] hover:bg-[#FE4C00] hover:text-white rounded-xl text-black font-poppins shadow-none'
+                      onClick={() => handleViewImage(data.data.img_ndvi)}
+                    >
                       Ver Imagen
                     </button>
                   </div>
@@ -126,7 +133,9 @@ const LoteDetail = () => {
                 <div className='flex flex-col w-full gap-4'>
                   <div className='flex justify-between w-full'>
                     <span className='font-semibold text-[#200085] text-xl'>NDWI</span>
-                    <button className='btn bg-[#EBE8E8] border-0 active:bg-[#200085] hover:bg-[#200085] hover:text-white rounded-xl text-black font-poppins shadow-none'>
+                    <button className='btn bg-[#EBE8E8] border-0 active:bg-[#200085] hover:bg-[#200085] hover:text-white rounded-xl text-black font-poppins shadow-none'
+                      onClick={() => handleViewImage(data.data.img_ndvi)}
+                    >
                       Ver Imagen
                     </button>
                   </div>

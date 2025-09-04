@@ -4,12 +4,21 @@ import { IoNotifications, IoExitOutline } from 'react-icons/io5';
 import { signOut } from '../../lib/auth';
 import { getAlertas } from '../../lib/analysis/analysis';
 import { motion, AnimatePresence } from 'framer-motion';
+import { FiAlertCircle } from "react-icons/fi";
+import { SiAnswer } from "react-icons/si";
+
+
+
+interface Metrica {
+  [key: string]: number | null;
+}
 
 interface NotificationMssg {
   finca: string;
   lote: string;
   causa_probable: string;
-  recomendaciones: string[];
+  metricas?: { ndvi?: Metrica }; 
+  recomendacion?: string;        
 }
 
 const Header = () => {
@@ -28,7 +37,8 @@ const Header = () => {
             finca: src?.finca ?? '',
             lote: src?.lote ?? '',
             causa_probable: src?.causa_probable ?? '',
-            recomendaciones: src?.recomendaciones ?? [],
+            metricas: src?.metricas ?? undefined,
+            recomendacion: src?.recomendacion ?? undefined,
           };
         });
         setNotifications(list);
@@ -127,7 +137,7 @@ const Header = () => {
               exit={{ x: 400, opacity: 0 }}
               transition={{ type: 'tween', duration: 0.25 }}
             >
-              <div className="flex items-center justify-between p-4 border-b">
+              <div className="flex items-center justify-between p-4 border-b border-gray-200">
                 <h3 className="text-xl font-semibold text-black">Notificaciones</h3>
                 <button
                   onClick={() => setShowNotifications(false)}
@@ -153,21 +163,42 @@ const Header = () => {
                         key={i}
                         className="rounded-xl border p-4 shadow-sm"
                       >
-                        <p className="font-medium text-black">
-                          Finca <span className="font-semibold">{n.finca}</span>{' '}
-                          / Lote <span className="font-semibold">{n.lote}</span>
+                        <p className="font-bold text-black p-2">
+                          Finca <span className="">{n.finca}</span>{' '}
+                          / Lote <span className="">{n.lote}</span>
                         </p>
-                        <p className="mt-1">
+                        <div className='flex gap-2'>
+                        {n.metricas?.ndvi
+                          ? Object.entries(n.metricas.ndvi).map(([key, value]) => (
+                            <div className='border rounded-lg px-2 py-1 bg-gray-100 justify-center items-center w-full' key={key}>
+                              <p  className="mt-1 flex flex-col justify-center items-center">
+                                <span className="font-medium text-black">
+                                  {key}
+                                </span>
+                                <span className='text-black'>{typeof value === 'number'
+                                    ? value.toFixed(4)
+                                    : 'N/A'}
+                                </span>
+                              </p>
+                            </div>
+                            ))
+                          : null}
+                        </div>
+                        <p className="mt-2 flex flex-col">
                           <span className="font-semibold text-black">
-                            Causa probable: {n.causa_probable}
+                            <FiAlertCircle className="inline-block mr-1" />
+                            Causa probable
                           </span>
+                          <span className="text-black">{n.causa_probable}</span>
                         </p>
-                        {n.recomendaciones?.length > 0 && (
-                          <ul className="mt-2 ml-2 list-disc list-inside text-sm text-gray-600 space-y-1">
-                            {n.recomendaciones.map((rec, idx) => (
-                              <li key={idx}>{rec}</li>
-                            ))}
-                          </ul>
+                        {n.recomendacion && (
+                          <p className="mt-2 flex flex-col">
+                            <span className="font-semibold text-black">
+                              <SiAnswer className="inline-block mr-1" />
+                              Recomendación
+                            </span>
+                            <span className="text-black">{n.recomendacion}</span>
+                          </p>
                         )}
                       </li>
                     ))}
