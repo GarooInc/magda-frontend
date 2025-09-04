@@ -17,7 +17,6 @@ const CellComponent = ({ value, color, showNumbers, nombre, clickeable }: CellCo
         <div
           className={`rounded-xl flex items-center justify-center font-semibold text-white text-xl cursor-pointer hover:scale-105 transition-transform duration-200`}
           style={{ backgroundColor: color , aspectRatio: "1 / 1" }}
-          title={`${nombre} - Lotes: ${value}`}
         >
         {showNumbers ? <span>{value.toFixed(4)}</span> : null}
       </div>
@@ -26,7 +25,6 @@ const CellComponent = ({ value, color, showNumbers, nombre, clickeable }: CellCo
       <div
         className={`rounded-xl flex items-center justify-center font-semibold text-white text-xl`}
         style={{ backgroundColor: color , aspectRatio: "1 / 1" }}
-        title={`${nombre} - Lotes: ${value}`}
       >
       {showNumbers ? <span>{value}</span> : null}
     </div>
