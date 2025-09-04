@@ -35,8 +35,7 @@ const LoteDetail = () => {
   }, [loteId]);
 
   const handleViewImage = (url : string) => {
-    console.log('Viewing image:', url);
-    window.open(url, '_blank');
+    window.open(url, '_self');
   }
 
   return (
@@ -134,7 +133,7 @@ const LoteDetail = () => {
                   <div className='flex justify-between w-full'>
                     <span className='font-semibold text-[#200085] text-xl'>NDWI</span>
                     <button className='btn bg-[#EBE8E8] border-0 active:bg-[#200085] hover:bg-[#200085] hover:text-white rounded-xl text-black font-poppins shadow-none'
-                      onClick={() => handleViewImage(data.data.img_ndvi)}
+                      onClick={() => handleViewImage(data.data.img_ndwi)}
                     >
                       Ver Imagen
                     </button>
