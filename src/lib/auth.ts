@@ -21,39 +21,40 @@ export function isTokenValidFromStorage(): boolean {
 
 // ---- API pública  ----
 export const signUp = (email: string, password: string): Promise<SignUpOutput> => {
-  // Amplify requiere username. Usamos el correo como username por simplicidad.
   return amplifySignUp({
     username: email,
     password,
     options: {
       userAttributes: { email },
-      // autoSignIn: { enabled: true }, // opcional
     },
   });
 };
 
+
+export async function isSignedIn(): Promise<boolean> {
+  try {
+    const session = await fetchAuthSession();
+    return !!session.tokens?.idToken; // si hay tokens, hay sesión
+  } catch {
+    return false;
+  }
+}
+
 export const signIn = async (email: string, password: string) => {
+  const alreadyIn = await isSignedIn();
+  if (alreadyIn) {
+    // opcional: devolver la sesión actual
+    return fetchAuthSession();
+  }
+
   await amplifySignIn({ username: email, password });
 
-  const session = await fetchAuthSession();
-
-  const exp = session.tokens?.idToken?.payload?.exp as number | undefined;
-  if (typeof exp === 'number') {
-    localStorage.setItem(ORIGINAL_EXP_KEY, String(exp));
-  }
-
-  const idJwt = session.tokens?.idToken?.toString();
-  if (idJwt) {
-    localStorage.setItem(COGNITO_TOKEN_KEY, idJwt);
-  }
-
-  return session; 
+  return fetchAuthSession();
 };
+
 
 export const signOut = async (): Promise<void> => {
   await amplifySignOut(); 
-  localStorage.removeItem(ORIGINAL_EXP_KEY);
-  localStorage.removeItem(COGNITO_TOKEN_KEY);
 };
 
 export const checkSession = async () => {
