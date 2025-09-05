@@ -8,7 +8,6 @@ import {
 } from 'aws-amplify/auth';
 
 const ORIGINAL_EXP_KEY = 'original_exp';
-const COGNITO_TOKEN_KEY = 'cognitoToken'; 
 
 // ---- Helpers ----
 export function isTokenValidFromStorage(): boolean {
@@ -43,7 +42,6 @@ export async function isSignedIn(): Promise<boolean> {
 export const signIn = async (email: string, password: string) => {
   const alreadyIn = await isSignedIn();
   if (alreadyIn) {
-    // opcional: devolver la sesión actual
     return fetchAuthSession();
   }
 
