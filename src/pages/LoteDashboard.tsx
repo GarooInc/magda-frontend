@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 const LoteDashboard = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [data, setData] = useState<{ resultado: { lotes: { id: string; diferencia: number }[] }, fecha_toma?: string } | null>(null)
+  const [data, setData] = useState<{ resultado: { lotes: { id: string; lote: string; diferencia: number }[] }, fecha_toma?: string } | null>(null)
 
   const [fincas, setFincas] = useState<string[]>([])
   const [selectedFinca, setSelectedFinca] = useState<string | null>(null)
@@ -68,7 +68,8 @@ const LoteDashboard = () => {
   const transformedData = useMemo(
     () =>
       data?.resultado.lotes?.map(lote => ({
-        nombre: lote.id,
+        nombre: String(lote.id),
+        lote: lote.lote,
         numero: Number(lote.diferencia),
       })) ?? [],
     [data]

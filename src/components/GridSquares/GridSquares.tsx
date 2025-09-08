@@ -3,6 +3,7 @@ import CellComponent from "../CellComponent/CellComponent";
 
 interface Finca {
   nombre: string;
+  lote: string;
   numero: number;
 }
 
@@ -44,7 +45,8 @@ const GridSquares = ({ data, columns = 5, showNumbers = false, clickeable = fals
           value={finca.numero}
           color={ thresholds ? getColorFinca(finca.numero) : getColorLote(finca.numero) }
           showNumbers={showNumbers}
-          nombre={finca.nombre}
+          nombre={finca.lote}
+          id ={finca.nombre}
           clickeable={clickeable}
         />
       ))}

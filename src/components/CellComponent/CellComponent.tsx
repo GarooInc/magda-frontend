@@ -7,15 +7,17 @@ interface CellComponentProps {
   color: string;
   showNumbers: boolean;
   nombre: string;
+  id?: string;
   clickeable?: boolean;
 }
 
-const CellComponent = ({ value, color, showNumbers, nombre, clickeable }: CellComponentProps) => {
+const CellComponent = ({ value, color, showNumbers, nombre, id, clickeable }: CellComponentProps) => {
   return (
     clickeable ? (
-      <Link to={`/panel-lote/${nombre}`}>
+      <Link to={`/panel-lote/${id}`}>
         <div
-          className={`rounded-xl flex items-center justify-center font-semibold text-white  xl:text-xl text-sm cursor-pointer hover:scale-105 transition-transform duration-200`}
+          className={`rounded-xl tooltip flex items-center justify-center font-semibold text-white  xl:text-xl text-sm cursor-pointer hover:scale-105 transition-transform duration-200`}
+          data-tip={`${nombre}`}
           style={{ backgroundColor: color , aspectRatio: "1 / 1" }}
         >
         {showNumbers ? <span>{value.toFixed(4)}</span> : null}
