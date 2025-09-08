@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 const FincaDashboard = () => {
 
   const temporadas: { [key: string]: number } = {'Medición Actual':1, 'Medición Anterior':2};
-  const [data, setData] = useState<{ resultado: { nombre: string; lotes_malos: number; }[]; fecha_toma?: string } | null>(null);
+  const [data, setData] = useState<{ resultado: { finca: string; lotes_malos: number; }[]; fecha_toma?: string } | null>(null);
   const [selectedTemporada, setSelectedTemporada] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -28,7 +28,8 @@ const FincaDashboard = () => {
   }, [selectedTemporada]);
 
   const transformedData = data?.resultado.map(finca => ({
-    nombre: finca.nombre,
+    nombre: finca.finca,
+    lote: finca.finca,
     numero: Number(finca.lotes_malos)
   })) ?? [];
 

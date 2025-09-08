@@ -25,7 +25,8 @@ const CellComponent = ({ value, color, showNumbers, nombre, id, clickeable }: Ce
       </Link>
     ) : (
       <div
-        className={`rounded-xl flex items-center justify-center font-semibold text-white text-xl`}
+        className={`rounded-xl tooltip flex items-center justify-center font-semibold text-white text-xl`}
+        data-tip={`${nombre}`}
         style={{ backgroundColor: color , aspectRatio: "1 / 1" }}
       >
       {showNumbers ? <span>{value}</span> : null}
