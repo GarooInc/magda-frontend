@@ -88,12 +88,13 @@ export async function getDetallePoligono(token: string, idPoligono: string, inte
 }
 
 
-export async function getAlertas() {
+export async function getAlertas(token: string) {
   try {
-    const response = await fetch(`https://n8n.srv853599.hstgr.cloud/webhook/63efc370-69d6-426e-a0c3-83c920cb4afa`, {
+    const response = await fetch(`https://magdalena-garoo.koyeb.app/notifications/`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     });
 

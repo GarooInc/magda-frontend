@@ -16,9 +16,8 @@ interface Metrica {
 interface NotificationMssg {
   finca: string;
   lote: string;
-  causa_probable: string;
-  metricas?: { ndvi?: Metrica }; 
-  recomendacion?: string;        
+  analisis?: { causa: string; recomendacion: string; }
+  ndvi_metricas?: Metrica;
 }
 
 const Header = () => {
@@ -26,28 +25,22 @@ const Header = () => {
   const [notifications, setNotifications] = useState<NotificationMssg[]>([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const [loading, setLoading] = useState(false);
+  const idToken = localStorage.getItem('cognitoToken') || '';
+
 
   useEffect(() => {
     setLoading(true);
-    getAlertas()
-      .then((data: NotificationMssg[]) => {
-        const list: NotificationMssg[] = (data || []).map((n: any) => {
-          const src = n?.notificacion_poligono ?? n;
-          return {
-            finca: src?.finca ?? '',
-            lote: src?.lote ?? '',
-            causa_probable: src?.causa_probable ?? '',
-            metricas: src?.metricas ?? undefined,
-            recomendacion: src?.recomendacion ?? undefined,
-          };
-        });
-        setNotifications(list);
+    getAlertas(idToken)
+      .then((data) => {
+        setNotifications(data.notificaciones || []);
       })
-      .catch((err) => {
-        console.error('Error fetching notifications:', err);
+      .catch((error) => {
+        console.error('Error fetching notifications:', error);
       })
-      .finally(() => setLoading(false));
-  }, []);
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [idToken]);
 
   const handleToggleNotifications = () => {
     setShowNotifications((s) => !s);
@@ -168,8 +161,8 @@ const Header = () => {
                           / Lote <span className="">{n.lote}</span>
                         </p>
                         <div className='flex gap-2'>
-                        {n.metricas?.ndvi
-                          ? Object.entries(n.metricas.ndvi).map(([key, value]) => (
+                        {n.ndvi_metricas
+                          ? Object.entries(n.ndvi_metricas).map(([key, value]) => (
                             <div className='border rounded-lg px-2 py-1 bg-gray-100 justify-center items-center w-full' key={key}>
                               <p  className="mt-1 flex flex-col justify-center items-center">
                                 <span className="font-medium text-black">
@@ -189,15 +182,15 @@ const Header = () => {
                             <FiAlertCircle className="inline-block mr-1" />
                             Causa probable
                           </span>
-                          <span className="text-black">{n.causa_probable}</span>
+                          <span className="text-black">{n.analisis?.causa || 'N/A'}</span>
                         </p>
-                        {n.recomendacion && (
+                        {n.analisis?.recomendacion && (
                           <p className="mt-2 flex flex-col">
                             <span className="font-semibold text-black">
                               <SiAnswer className="inline-block mr-1" />
                               Recomendación
                             </span>
-                            <span className="text-black">{n.recomendacion}</span>
+                            <span className="text-black">{n.analisis?.recomendacion}</span>
                           </p>
                         )}
                       </li>
