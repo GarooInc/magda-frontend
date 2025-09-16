@@ -4,6 +4,7 @@ import FincaDashboard from "../pages/FincaDashboard";
 import PrivateRoute from "./PrivateRoute";
 import LoteDashboard from "../pages/LoteDashboard";
 import LoteDetail from "../pages/LoteDetail";
+import FormUpload from "../pages/FormUpload";
 
 const AppRouter = () => {
   return (
@@ -17,6 +18,11 @@ const AppRouter = () => {
           <Route path=":loteId" element={<LoteDetail />} />
         </Route>
       </Route>
+
+      <Route
+          path="/formulario/:id_poligono"
+          element={<FormUpload />}
+      />
 
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
