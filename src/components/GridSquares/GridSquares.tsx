@@ -28,10 +28,10 @@ const GridSquares = ({ data, columns = 5, showNumbers = false, clickeable = fals
   };
 
   const getColorFinca = (v: number): string => {
-    if (v > thresholdsitem[0]) return colors[0];
-    if (v > thresholdsitem[1]) return colors[1];
+    if (v > thresholdsitem[3]) return colors[3];
     if (v > thresholdsitem[2]) return colors[2];
-    return colors[3];
+    if (v > thresholdsitem[1]) return colors[1];
+    return colors[0];
   };
 
   return (
