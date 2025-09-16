@@ -1,13 +1,13 @@
-export async function postform(data: { id_poligono: string; causa: string; solucion: string; fotos: File[] }) { 
-  // use postImage and uploadImageToS3 to upload images to S3 and get their URLs
+export async function postform(data: { id_poligono: string; causa: string; solucion: string; fotos: File[] }, token: string) {
   const urls = await Promise.all(
     data.fotos.map(async (file) => {
-      const uploadUrl = await postImage(data.id_poligono);
-      await uploadImageToS3(uploadUrl, file);
-      // Extract the public URL from the upload URL
-      return uploadUrl.split('?')[0];
+      const { upload_url, public_url } = await postImage(data.id_poligono);
+      await uploadImageToS3(upload_url, file);
+      return public_url;
     })
   );
+  console.log(urls);
+  console.log("tokenn",token);
   const dataWithUrls = {
     id_poligono: data.id_poligono,
     causa: data.causa,
@@ -17,6 +17,10 @@ export async function postform(data: { id_poligono: string; causa: string; soluc
   try {
     const response = await fetch(`https://magdalena-garoo.koyeb.app/psm/`, {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify(dataWithUrls),
     });
 
@@ -177,8 +181,11 @@ export async function postImage (idPolygon: string) {
   try {
     const response = await fetch(`https://bucket-magdalenas-garoo.koyeb.app/generate-upload-url`, {
       method: "POST",
-      body: JSON.stringify({ filename: `${idPolygon}-${Date.now()}.jpeg` }),
+      body: JSON.stringify({
+          "filename": `${idPolygon}/${Date.now()}.jpeg`
+        }),
       headers: {
+        "Content-Type": "application/json",
         "x-api-key": import.meta.env.VITE_BUCKET_KEY
       }
     });
@@ -189,11 +196,9 @@ export async function postImage (idPolygon: string) {
     }
 
     const result = await response.json();
-    if (!result.url) {
-      throw new Error("No se recibió URL");
-    }
+    console.log("Generated upload URL:", result);
 
-    return result.url;
+    return result;
   } catch (error) {
     console.error("Error al hacer fetch:", error);
     throw error;

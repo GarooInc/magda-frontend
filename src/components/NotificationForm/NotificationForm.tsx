@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { getPolygon } from "../../lib/analysis/analysis";
 import { postform } from "../../lib/analysis/analysis";
+import Toast from "../Toast/Toast";
+import {useNavigate} from "react-router-dom";
 
 type FormValues = {
     id_poligono: string;
@@ -18,20 +20,23 @@ const NotificationForm = () => {
     const [previewUrls, setPreviewUrls] = useState<string[]>([]);
     const [lote, setLote] = useState<string>("");
     const [finca, setFinca] = useState<string>("");
+    const [showToast, setShowToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    watch,
-    formState: { errors },
-  } = useForm<FormValues>({
-    defaultValues: {
-        id_poligono: "",
-        causa: "",
-        solucion: "",
-    },
-  });
+    const navigate = useNavigate();
+
+    const {
+      register,
+      handleSubmit,
+      reset,
+      watch,
+      formState: { errors },
+    } = useForm<FormValues>({
+      defaultValues: {
+          id_poligono: "",
+          causa: "",
+          solucion: "",
+      },
+    });
 
   useEffect(() => {
     reset((prev) => ({
@@ -60,17 +65,21 @@ const NotificationForm = () => {
         solucion: data.solucion,
         fotos: data.fotos ? Array.from(data.fotos) : [],
       };
-      await postform(finaldata);
+      const token = localStorage.getItem("cognitoToken") || "";
+      await postform(finaldata, token);
       reset({
         id_poligono: "",
         causa: "",
         solucion: "",
       });
       setPreviewUrls([]);
-      alert("Alerta guardada correctamente.");
+      setShowToast({ message: "Alerta guardada correctamente.", type: "success" }); 
+      setTimeout(() => {
+        navigate("/panel-finca");
+      }, 1500);
     } catch (e: any) {
       console.error(e);
-      alert(`Error: ${e?.message ?? "No se pudo guardar"}`);
+      setShowToast({ message: `Error: ${e?.message ?? "No se pudo guardar"}`, type: "error" });
     } finally {
       setEnviando(false);
     }
@@ -94,6 +103,13 @@ const NotificationForm = () => {
 
   return (
     <div className=" flex flex-col justify-center items-center">
+      {showToast && (
+        <Toast
+          message={showToast.message}
+          type={showToast.type}
+          onClose={() => setShowToast(null)}
+        />
+      )}
       <h1 className="text-[#200085] text-2xl font-bold">
         Notificación de Incidencias
       </h1>
