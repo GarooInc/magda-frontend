@@ -67,7 +67,7 @@ const NotificationForm = () => {
       setEnviando(true);
       const finaldata = {
         id_poligono: id_poligono || "",
-        idnotificacion: idnotificacion || "",
+        id_notificacion: idnotificacion || "",
         causa: data.causa,
         fecha: fechaFormateada,
         solucion: data.solucion,
