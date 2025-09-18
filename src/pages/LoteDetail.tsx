@@ -187,7 +187,7 @@ const LoteDetail = () => {
                             <FaCircleCheck className="timeline-icon text-gray-500" />
                           </div>
 
-                          <div className={`${leftSide ? 'timeline-start' : 'timeline-end'} timeline-box w-full md:w-auto bg-transparent border-none`}>
+                          <div className={`${leftSide ? 'timeline-start' : 'timeline-end'} timeline-box border-none shadow-xl w-full md:w-auto bg-transparent`}>
                             <div className="flex flex-col text-black">
                               <div className="text-xs text-gray-500">{item.fecha}</div>
                               <div className='flex flex-col'>
