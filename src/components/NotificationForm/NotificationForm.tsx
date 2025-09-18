@@ -9,19 +9,25 @@ import {useNavigate} from "react-router-dom";
 type FormValues = {
     id_poligono: string;
     causa: string;
+    fecha?: string;
     solucion: string;
     fotos: FileList;
 };
 
 const NotificationForm = () => {
 
-    const { id_poligono } = useParams<{ id_poligono: string }>();
+    const { id_poligono, idnotificacion } = useParams<{ id_poligono: string, idnotificacion: string }>();
     const [enviando, setEnviando] = useState(false);
     const [previewUrls, setPreviewUrls] = useState<string[]>([]);
     const [lote, setLote] = useState<string>("");
     const [finca, setFinca] = useState<string>("");
     const [showToast, setShowToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
+    const fecha = new Date();
+    const dia = String(fecha.getDate()).padStart(2, '0');
+    const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+    const anio = fecha.getFullYear();
 
+    const fechaFormateada = `${dia}-${mes}-${anio}`;  
     const navigate = useNavigate();
 
     const {
@@ -61,7 +67,9 @@ const NotificationForm = () => {
       setEnviando(true);
       const finaldata = {
         id_poligono: id_poligono || "",
+        idnotificacion: idnotificacion || "",
         causa: data.causa,
+        fecha: fechaFormateada,
         solucion: data.solucion,
         fotos: data.fotos ? Array.from(data.fotos) : [],
       };
@@ -113,10 +121,15 @@ const NotificationForm = () => {
       <h1 className="text-[#200085] text-2xl font-bold">
         Notificación de Incidencias
       </h1>
-        <p className="text-gray-600 mt-2">
-            Finca: <span className="font-semibold">{finca || "Cargando..."}</span> | Lote: <span className="font-semibold">{lote || "Cargando..."}</span>
-        </p>
-
+      {
+        finca && lote && fecha && (
+            <p className="text-gray-600 mt-2">
+              Finca: <span className="font-semibold">{finca}</span> 
+              | Lote: <span className="font-semibold">{lote}</span>
+              | Fecha: <span className="font-semibold">{fechaFormateada}</span>
+            </p>
+        )
+      }
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4  mt-4 w-full container bg-white md:mx-auto md:w-2xl p-4 md:p-10 rounded-xl shadow-lg">
         <div className="flex flex-col gap-2">
           <label
