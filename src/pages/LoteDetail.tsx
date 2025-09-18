@@ -3,6 +3,19 @@ import { useParams, useNavigate } from "react-router-dom";
 import { IoCloseCircle } from "react-icons/io5";
 import { getDetallePoligono } from '../lib/analysis/analysis'
 import { motion, AnimatePresence } from 'framer-motion';
+import { FaCircleCheck } from "react-icons/fa6";
+
+
+
+type NDVIMetricas = { [key: string]: number };
+type PSMItem = {
+  id_poligono: string;
+  causa: string;
+  solucion: string;
+  fotos: string[];
+  id_notificacion: string;
+  fecha: string; 
+};
 
 const LoteDetail = () => {
   const { loteId } = useParams();
@@ -12,9 +25,11 @@ const LoteDetail = () => {
   const [error, setError] = useState<string | null>(null)
   const [data, setData] = useState<{
     poligono: { finca: string; lote: string; region: string; admin: string; area: number; },
-    data: { ndvi_metricas?: { [key: string]: number } | null; ndwi_mean?: number | null ; img_ndwi: string; img_ndvi: string; },
+    data: { ndvi_metricas?:  NDVIMetricas | null; ndwi_mean?: number | null ; img_ndwi: string; img_ndvi: string; },
     fecha_toma?: string
+    psm?: PSMItem[];
   } | null>(null)
+
 
   const handleClose = () => navigate(-1);
 
@@ -38,9 +53,13 @@ const LoteDetail = () => {
     window.open(url, '_self');
   }
 
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxImages, setLightboxImages] = useState<string[]>([]);
+
+
   return (
     <div className='bg-white h-[100vh] flex justify-center items-center'>
-      <div className='p-20 lg:px-60 flex-col bg-white w-full'>
+      <div className='flex-col bg-white'>
 
         <AnimatePresence mode="wait">
           {loading && (
@@ -82,7 +101,7 @@ const LoteDetail = () => {
           {!loading && !error && data && (
             <motion.div
               key="content"
-              className='flex flex-col shadow-2xl p-10 rounded-2xl'
+              className='flex flex-col shadow-2xl rounded-2xl  p-10 w-4xl max-h-[80vh]'
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
@@ -94,7 +113,7 @@ const LoteDetail = () => {
 
               <div className='h-[1px] w-full bg-gray-500 mt-4'></div>
 
-              <div className='flex flex-col gap-4'>
+              <div className='flex flex-col gap-4 overflow-y-auto'>
                 <div className='flex flex-col gap-2 py-4'>
                   <span className='font-semibold text-black text-2xl'>
                     {data.poligono.finca} | Lote {data.poligono.lote}
@@ -147,11 +166,93 @@ const LoteDetail = () => {
                     )}
                   </div>
                 </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
 
+                {/* TIMELINE */}
+              <div className='flex flex-col w-full gap-4'>
+                <div className='flex items-center justify-between py-2'>
+                  <span className='font-semibold text-[#0F172A] text-xl'>Cronología</span>
+                  <span className='text-sm text-gray-500'>
+                    {data.psm?.length ? `${data.psm.length} evento(s)` : 'Sin eventos'}
+                  </span>
+                </div>
+
+                {data.psm?.length ? (
+                  <ul className="timeline timeline-vertical ">
+                    {data.psm.map((item, idx) => {
+                      const leftSide = idx % 2 === 0;
+                      return (
+                        <li key={`${item.id_notificacion}-${idx}`}>
+                          {idx !== 0 && <hr className='bg-gray-300' />}
+                          <div className="timeline-middle">
+                            <FaCircleCheck className="timeline-icon text-gray-500" />
+                          </div>
+
+                          <div className={`${leftSide ? 'timeline-start' : 'timeline-end'} timeline-box w-full md:w-auto bg-transparent border-none`}>
+                            <div className="flex flex-col text-black">
+                              <div className="text-xs text-gray-500">{item.fecha}</div>
+                              <div className='flex flex-col'>
+                                <div className="font-semibold">Causa</div>
+                                <div className="text-sm text-gray-700">{item.causa}</div>
+                              </div>
+                              <div className='flex flex-col'>
+                                <div className="font-semibold mt-2">Solución</div>
+                                <div className="text-sm text-gray-700">{item.solucion}</div>
+                              </div>
+
+                              {item.fotos?.length > 0 && (
+                                <button
+                                  onClick={() => {
+                                    setLightboxImages(item.fotos);
+                                    setLightboxOpen(true);
+                                  }}
+                                  className="btn btn-sm mt-3 rounded-lg bg-[#200085] hover:text-white"
+                                >
+                                  Ver fotos ({item.fotos.length})
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                          <hr className='bg-gray-300' />
+                        </li>
+                      );
+                    })}
+                  </ul>
+                ) : (
+                  <div className="text-gray-500 text-sm">No hay eventos de cronología para mostrar.</div>
+                )}
+              </div>
+              </div>
+
+                  {/* POPUP FOTOS */}
+                    <AnimatePresence>
+                      {lightboxOpen && (
+                        <motion.div
+                          className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          onClick={() => setLightboxOpen(false)} 
+                        >
+                          <motion.div
+                            className="bg-white p-4 rounded-xl max-w-2xl w-full flex flex-wrap gap-4"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            {lightboxImages.map((url, i) => (
+                              <img
+                                key={i}
+                                src={url}
+                                alt={`foto ${i + 1}`}
+                                className="w-1/4 rounded-md cursor-pointer"
+                                onClick={() => window.open(url, '_blank')}
+                              />
+                            ))}
+                          </motion.div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
       </div>
     </div>
   )

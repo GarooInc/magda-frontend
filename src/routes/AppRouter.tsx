@@ -20,7 +20,7 @@ const AppRouter = () => {
       </Route>
 
       <Route
-          path="/formulario/:id_poligono"
+          path="/formulario/:id_poligono/:idnotificacion?"
           element={<FormUpload />}
       />
 

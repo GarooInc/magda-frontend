@@ -147,6 +147,7 @@ export async function getDetallePoligono(token: string, idPoligono: string, inte
     }
 
     const data = await response.json();
+    console.log("Fetched polygon detail data:", data);
     return data;
   } catch (error) {
     console.error("Error al hacer fetch:", error);
