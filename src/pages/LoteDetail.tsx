@@ -25,7 +25,7 @@ const LoteDetail = () => {
   const [error, setError] = useState<string | null>(null)
   const [data, setData] = useState<{
     poligono: { finca: string; lote: string; region: string; admin: string; area: number; },
-    data: { ndvi_metricas?:  NDVIMetricas | null; ndwi_mean?: number | null ; img_ndwi: string; img_ndvi: string; },
+    data: { ndvi_metricas?:  NDVIMetricas | null; ndwi_mean?: number | null ; ndvi_mean?: number | null ; img_ndwi: string; img_ndvi: string; },
     fecha_toma?: string
     psm?: PSMItem[];
   } | null>(null)
@@ -137,14 +137,25 @@ const LoteDetail = () => {
                       Ver Imagen
                     </button>
                   </div>
-                  <div className='flex justify-between gap-4'>
-                    {data.data.ndvi_metricas && Object.entries(data.data.ndvi_metricas).map(([key, value]) => (
-                      <div key={key} className='w-full font-light text-gray-500 text-lg p-2 border border-gray-300 rounded-lg flex flex-col justify-center items-center'>
-                        <span>{Number(value).toFixed(4)}</span>
-                        <span className='capitalize'>{key}</span>
+
+                  <div className='flex flex-col gap-4'>
+                    <div className='flex justify-between gap-4'>
+                      {data.data.ndvi_metricas && Object.entries(data.data.ndvi_metricas).map(([key, value]) => (
+                        <div key={key} className='w-full font-light text-gray-500 text-lg p-2 border border-gray-300 rounded-lg flex flex-col justify-center items-center'>
+                          <span>{Number(value).toFixed(4)}</span>
+                          <span className='capitalize'>{key}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {data.data.ndvi_mean && (
+                      <div className='w-1/3 font-light text-gray-500 text-lg p-2 border border-gray-300 rounded-lg flex flex-col justify-center items-center'>
+                        <span>{Number(data.data.ndvi_mean).toFixed(4)}</span>
+                        <span className='capitalize'>Promedio</span>
                       </div>
-                    ))}
+                    )}
                   </div>
+                  
                 </div>
 
                 {/* NDWI */}
