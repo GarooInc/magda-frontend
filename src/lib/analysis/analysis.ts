@@ -57,7 +57,7 @@ export async function getPolygon(token: string, id: string) {
       throw new Error("Polígono no encontrado");
     }
 
-    console.log("Fetched polygon data:", polygon);
+    // console.log("Fetched polygon data:", polygon);
     return polygon;
   } catch (error) {
     console.error("Error al hacer fetch:", error);
@@ -80,7 +80,7 @@ export async function getFincasLotesMalos(token: string, temporada: number) {
     }
 
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
     return data;
   } catch (error) {
     console.error("Error al hacer fetch:", error);
@@ -125,7 +125,7 @@ export async function getDiferenciaLotesMalos(token: string, temporada: number, 
     }
 
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
     return data;
   } catch (error) {
     console.error("Error al hacer fetch:", error);
@@ -148,7 +148,7 @@ export async function getDetallePoligono(token: string, idPoligono: string, inte
     }
 
     const data = await response.json();
-    console.log("Fetched polygon detail data:", data);
+    // console.log("Fetched polygon detail data:", data);
     return data;
   } catch (error) {
     console.error("Error al hacer fetch:", error);
@@ -198,7 +198,7 @@ export async function postImage (idPolygon: string) {
     }
 
     const result = await response.json();
-    console.log("Generated upload URL:", result);
+      // console.log("Generated upload URL:", result);
 
     return result;
   } catch (error) {
