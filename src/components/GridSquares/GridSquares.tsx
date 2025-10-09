@@ -5,6 +5,7 @@ interface Finca {
   nombre: string;
   lote: string;
   numero: number;
+  nubosidad?: boolean;
 }
 
 interface GridSquaresProps {
@@ -42,6 +43,7 @@ const GridSquares = ({ data, columns = 5, showNumbers = false, clickeable = fals
       {data.map((finca, i) => (
         <CellComponent
           key={i}
+          nubosidad={finca.nubosidad}
           value={finca.numero}
           color={ thresholds ? getColorFinca(finca.numero) : getColorLote(finca.numero) }
           showNumbers={showNumbers}

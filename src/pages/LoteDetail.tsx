@@ -4,6 +4,8 @@ import { IoCloseCircle } from "react-icons/io5";
 import { getDetallePoligono } from '../lib/analysis/analysis'
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaCircleCheck } from "react-icons/fa6";
+import { FaFileImage } from "react-icons/fa6";
+
 
 
 
@@ -24,6 +26,7 @@ const LoteDetail = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [data, setData] = useState<{
+    base_color?: string;
     poligono: { finca: string; lote: string; region: string; admin: string; area: number; },
     data: { ndvi_metricas?:  NDVIMetricas | null; ndwi_mean?: number | null ; ndvi_mean?: number | null ; img_ndwi: string; img_ndvi: string; },
     fecha_toma?: string
@@ -49,8 +52,10 @@ const LoteDetail = () => {
       .finally(() => setLoading(false));
   }, [loteId]);
 
-  const handleViewImage = (url : string) => {
-    window.open(url, '_self');
+  const handleViewImage = (url: string | undefined) => {
+    if (url) {
+      window.open(url, '_self');
+    }
   }
 
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -115,9 +120,24 @@ const LoteDetail = () => {
 
               <div className='flex flex-col gap-4 overflow-y-auto'>
                 <div className='flex flex-col gap-2 py-4'>
-                  <span className='font-semibold text-black text-2xl'>
-                    {data.poligono.finca} | Lote {data.poligono.lote}
-                  </span>
+                  <div className='justify-between flex w-full'>
+                    <span className='font-semibold text-black text-2xl'>
+                      {data.poligono.finca} | Lote {data.poligono.lote}
+                    </span>
+
+                    {
+                      data.base_color && (
+                        <div className='flex gap-2 items-center'>
+                          <FaFileImage className='text-gray-500 w-5 h-5' />
+                          <span className='font-light text-gray-500 text-lg cursor-pointer hover:underline'
+                            onClick={() => handleViewImage(data.base_color)}
+                          >
+                            Imagen satelital
+                          </span>
+                        </div>
+                      )
+                    }
+                  </div>
                   <div className='flex gap-4'>
                     <span className='font-light text-gray-500 text-lg'>Región: {data.poligono.region}</span>
                     <span className='font-light text-gray-500 text-lg'>Admin: {data.poligono.admin}</span>

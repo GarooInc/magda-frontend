@@ -5,28 +5,52 @@ import { RiArrowDownSLine } from 'react-icons/ri'
 import { getDiferenciaLotesMalos, getFincas } from '../lib/analysis/analysis'
 import { motion, AnimatePresence } from 'framer-motion'
 
+type Temporada = 'Medición Actual' | 'Medición Anterior'
+
+const TEMPORADA_TO_NUM: Record<Temporada, number> = {
+  'Medición Actual': 1,
+  'Medición Anterior': 2,
+}
+const NUM_TO_TEMPORADA: Record<number, Temporada> = {
+  1: 'Medición Actual',
+  2: 'Medición Anterior',
+}
+
+const LS_KEYS = {
+  finca: 'selectedFinca',
+  temporada: 'selectedTemporada',
+} as const
+
 const LoteDashboard = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [data, setData] = useState<{ resultado: { lotes: { id: string; lote: string; diferencia: number }[] }, fecha_toma?: string } | null>(null)
+  const [data, setData] = useState<{ resultado: { lotes: { id: string; lote: string; diferencia: number; nubosidad: boolean }[] }, fecha_toma?: string } | null>(null)
 
   const [fincas, setFincas] = useState<string[]>([])
   const [selectedFinca, setSelectedFinca] = useState<string | null>(null)
-  const [selectedTemporada, setSelectedTemporada] = useState<'Medición Actual' | 'Medición Anterior'>('Medición Actual')
-
-  const temporadas: { [k in typeof selectedTemporada]: number } = {
-    'Medición Actual': 1,
-    'Medición Anterior': 2,
-  }
+  const [selectedTemporada, setSelectedTemporada] = useState<Temporada>('Medición Actual')
 
   const initialized = useRef(false)
 
-  const loadData = async (token: string, finca: string, temporada: typeof selectedTemporada) => {
+  const saveState = (finca: string | null, temporada: Temporada) => {
+    const params = new URLSearchParams(window.location.search)
+    if (finca) {
+      params.set('finca', finca)
+      localStorage.setItem(LS_KEYS.finca, finca)
+    }
+    params.set('temporada', String(TEMPORADA_TO_NUM[temporada]))
+    localStorage.setItem(LS_KEYS.temporada, String(TEMPORADA_TO_NUM[temporada]))
+    const newUrl = `${window.location.pathname}?${params.toString()}${window.location.hash}`
+    window.history.replaceState(null, '', newUrl)
+  }
+
+  const loadData = async (token: string, finca: string, temporada: Temporada) => {
     setLoading(true)
     setError(null)
-    localStorage.setItem('selectedTemporada', temporadas[temporada].toString())
+
+    localStorage.setItem(LS_KEYS.temporada, String(TEMPORADA_TO_NUM[temporada]))
     try {
-      const resp = await getDiferenciaLotesMalos(token, temporadas[temporada], finca)
+      const resp = await getDiferenciaLotesMalos(token, TEMPORADA_TO_NUM[temporada], finca)
       setData(resp)
     } catch (err: any) {
       console.error(err)
@@ -43,11 +67,31 @@ const LoteDashboard = () => {
         const resp = await getFincas(token)
         const names: string[] = resp.fincas ?? []
         setFincas(names)
-        const first = names[0] ?? null
-        setSelectedFinca(first)
 
-        if (first) {
-          await loadData(token, first, 'Medición Actual')
+        const params = new URLSearchParams(window.location.search)
+        const urlFinca = params.get('finca')
+        const urlTemporadaNum = Number(params.get('temporada'))
+        const lsFinca = localStorage.getItem(LS_KEYS.finca)
+        const lsTemporadaNum = Number(localStorage.getItem(LS_KEYS.temporada))
+
+        const fincaInicial =
+          (urlFinca && names.includes(urlFinca) && urlFinca) ||
+          (lsFinca && names.includes(lsFinca) && lsFinca) ||
+          (names[0] ?? null)
+
+        const temporadaInicialNum =
+          (urlTemporadaNum === 1 || urlTemporadaNum === 2) ? urlTemporadaNum :
+          (lsTemporadaNum === 1 || lsTemporadaNum === 2) ? lsTemporadaNum :
+          1
+
+        const temporadaInicial = NUM_TO_TEMPORADA[temporadaInicialNum]
+
+        setSelectedFinca(fincaInicial)
+        setSelectedTemporada(temporadaInicial)
+
+        if (fincaInicial) {
+          saveState(fincaInicial, temporadaInicial)
+          await loadData(token, fincaInicial, temporadaInicial)
         }
         initialized.current = true
       } catch (err: any) {
@@ -62,6 +106,7 @@ const LoteDashboard = () => {
     if (!selectedFinca) return
 
     const token = localStorage.getItem('cognitoToken') || ''
+    saveState(selectedFinca, selectedTemporada)
     loadData(token, selectedFinca, selectedTemporada)
   }, [selectedTemporada, selectedFinca])
 
@@ -71,13 +116,13 @@ const LoteDashboard = () => {
         nombre: String(lote.id),
         lote: lote.lote,
         numero: Number(lote.diferencia),
+        nubosidad: lote.nubosidad
       })) ?? [],
     [data]
   )
 
-  const handleSelectedDate = (date: 'Medición Actual' | 'Medición Anterior') => {
+  const handleSelectedDate = (date: Temporada) => {
     setSelectedTemporada(date)
-    localStorage.setItem('selectedTemporada', date)
   }
 
   return (

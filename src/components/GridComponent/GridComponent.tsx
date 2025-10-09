@@ -2,7 +2,7 @@ import GridSquares from "../GridSquares/GridSquares";
 import Legend from "../LegendComponent/LegendComponent";
 
 interface GridComponentProps {
-  data: { nombre: string; lote: string; numero: number; }[];
+  data: { nombre: string; lote: string; numero: number; nubosidad?: boolean }[];
   titulo?: string;
   clickeable?: boolean;
   fecha?: string;

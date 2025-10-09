@@ -125,6 +125,7 @@ export async function getDiferenciaLotesMalos(token: string, temporada: number, 
     }
 
     const data = await response.json();
+    console.log(data);
     return data;
   } catch (error) {
     console.error("Error al hacer fetch:", error);

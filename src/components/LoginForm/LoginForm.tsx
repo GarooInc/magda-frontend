@@ -61,7 +61,6 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       const shortUsername = username.trim().substring(0, 5);
       localStorage.setItem('username', shortUsername);
 
-      console.log('Login exitoso. Token:', idToken);
       showNotification('Inicio de sesión exitoso', 'success');
 
       setTimeout(() => {
