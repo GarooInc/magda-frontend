@@ -20,7 +20,7 @@ export default function LiveIndicesChart({
     { "fecha": "28-09-2025", "value": 0.7998030868544184 }
   ],
   title = "Índice de Vegetación",
-  color = "green",
+  color = "orange",
   yAxisLabel = ""
 }: Props) {
   const parsedData = data.map((d) => {
@@ -69,7 +69,7 @@ export default function LiveIndicesChart({
     },
   };
 
-  const colors = colorClasses[color as keyof typeof colorClasses] || colorClasses.green;
+  const colors = colorClasses[color as keyof typeof colorClasses] || colorClasses.orange;
 
   return (
     <div className="w-full max-w-md">
