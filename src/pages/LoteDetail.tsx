@@ -5,6 +5,7 @@ import { getDetallePoligono } from '../lib/analysis/analysis'
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaCircleCheck } from "react-icons/fa6";
 import { FaFileImage } from "react-icons/fa6";
+import LiveIndicesChart from '../components/LiveIndicesChart/LiveIndicesChart';
 
 
 
@@ -19,6 +20,12 @@ type PSMItem = {
   fecha: string; 
 };
 
+type HistoricoPSM = {
+  fecha: string;
+  ndvi_mean: number | null;
+  ndwi_mean: number | null;
+};
+
 const LoteDetail = () => {
   const { loteId } = useParams();
   const navigate = useNavigate();
@@ -31,26 +38,49 @@ const LoteDetail = () => {
     data: { ndvi_metricas?:  NDVIMetricas | null; ndwi_mean?: number | null ; ndvi_mean?: number | null ; img_ndwi: string; img_ndvi: string; },
     fecha_toma?: string
     psm?: PSMItem[];
+    historico?: HistoricoPSM[];
   } | null>(null)
 
 
   const handleClose = () => navigate(-1);
 
   useEffect(() => {
-    const token = localStorage.getItem('cognitoToken') || '';
-    const temporada = Number(localStorage.getItem('selectedTemporada') || '1');
+  const token = localStorage.getItem('cognitoToken') || '';
+  const temporada = Number(localStorage.getItem('selectedTemporada') || '1');
 
-    setLoading(true);
-    setError(null);
+  setLoading(true);
+  setError(null);
 
-    getDetallePoligono(token, loteId ?? '', temporada)
-      .then(resp => setData(resp))
-      .catch((err) => {
-        console.error(err);
-        setError(err?.message ?? 'Error al cargar los datos del lote');
-      })
-      .finally(() => setLoading(false));
-  }, [loteId]);
+  getDetallePoligono(token, loteId ?? '', temporada)
+    .then(resp => {
+      const historico = [...(resp.historico ?? [])];
+
+      const fechaActual =
+        resp.fecha_toma ??
+        new Date().toISOString().slice(0, 10);
+
+      if (resp.data?.ndvi_mean != null) {
+        historico.push({
+            fecha: fechaActual,
+            ndvi_mean: resp.data.ndvi_mean,
+            ndwi_mean: resp.data?.ndwi_mean ?? null,
+          });
+      }
+
+      historico.sort((a, b) => a.fecha.localeCompare(b.fecha));
+
+      setData({
+        ...resp,
+        historico,
+      });
+    })
+    .catch((err) => {
+      console.error(err);
+      setError(err?.message ?? 'Error al cargar los datos del lote');
+    })
+    .finally(() => setLoading(false));
+}, [loteId]);
+
 
   const handleViewImage = (url: string | undefined) => {
     if (url) {
@@ -175,7 +205,8 @@ const LoteDetail = () => {
                       </div>
                     )}
                   </div>
-                  
+
+                  <LiveIndicesChart data={(data.historico ?? []).map(h => ({ fecha: h.fecha, value: h.ndvi_mean || 0 }))} title="Evolución NDVI" color="orange" yAxisLabel="NDVI" />
                 </div>
 
                 {/* NDWI */}
@@ -196,6 +227,8 @@ const LoteDetail = () => {
                       </div>
                     )}
                   </div>
+
+                  <LiveIndicesChart data={(data.historico ?? []).map(h => ({ fecha: h.fecha, value: h.ndwi_mean || 0 }))} title="Evolución NDWI" color="blue" yAxisLabel="NDWI" />
                 </div>
 
                 {/* TIMELINE */}
