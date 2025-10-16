@@ -34,7 +34,7 @@ const LoteDetail = () => {
   const [error, setError] = useState<string | null>(null)
   const [data, setData] = useState<{
     base_color?: string;
-    poligono: { finca: string; lote: string; region: string; admin: string; area: number; },
+    poligono: { finca: string; lote: string; region: string; admin: string; area: number; pante: number; };
     data: { ndvi_metricas?:  NDVIMetricas | null; ndwi_mean?: number | null ; ndvi_mean?: number | null ; img_ndwi: string; img_ndvi: string; },
     fecha_toma?: string
     psm?: PSMItem[];
@@ -152,7 +152,7 @@ const LoteDetail = () => {
                 <div className='flex flex-col gap-2 py-4'>
                   <div className='justify-between flex w-full'>
                     <span className='font-semibold text-black text-2xl'>
-                      {data.poligono.finca} | Lote {data.poligono.lote}
+                      {data.poligono.finca} | Lote {data.poligono.lote} | Pante {data.poligono.pante}
                     </span>
 
                     {
