@@ -33,7 +33,7 @@ const LoteDetail = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [data, setData] = useState<{
-    base_color?: string;
+    basecolor_url?: string;
     poligono: { finca: string; lote: string; region: string; admin: string; area: number; pante: number; };
     data: { ndvi_metricas?:  NDVIMetricas | null; ndwi_mean?: number | null ; ndvi_mean?: number | null ; img_ndwi: string; img_ndvi: string; },
     fecha_toma?: string
@@ -156,11 +156,11 @@ const LoteDetail = () => {
                     </span>
 
                     {
-                      data.base_color && (
+                      data.basecolor_url && (
                         <div className='flex gap-2 items-center'>
                           <FaFileImage className='text-gray-500 w-5 h-5' />
                           <span className='font-light text-gray-500 text-lg cursor-pointer hover:underline'
-                            onClick={() => handleViewImage(data.base_color)}
+                            onClick={() => handleViewImage(data.basecolor_url)}
                           >
                             Imagen satelital
                           </span>
