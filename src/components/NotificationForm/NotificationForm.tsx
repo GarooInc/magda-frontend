@@ -94,7 +94,6 @@ const NotificationForm = () => {
   };
 
   useEffect(() => {
-    console.log("id_poligono", id_poligono);
     if (!id_poligono) return;
       try {
         const token = localStorage.getItem("cognitoToken") || "";
@@ -102,6 +101,7 @@ const NotificationForm = () => {
           setLote(data.lote || "");
           setFinca(data.finca || "");
         });
+        console.log("Data fetched for polygon:", { lote, finca });
       } catch (e) {
         console.error(e);
       }
@@ -110,7 +110,7 @@ const NotificationForm = () => {
 
 
   return (
-    <div className=" flex flex-col justify-center items-center">
+    <div className={`flex flex-col  ${!finca || !lote ? 'h-full justify-start gap-20 items-center mt-20' : 'justify-center items-center'} w-full px-4 md:px-0`}>
       {showToast && (
         <Toast
           message={showToast.message}
@@ -118,19 +118,20 @@ const NotificationForm = () => {
           onClose={() => setShowToast(null)}
         />
       )}
-      <h1 className="text-[#200085] text-2xl font-bold">
+      <h1 className="text-[#200085] text-2xl font-bold text-center">
         Notificación de Incidencias
       </h1>
       {
-        finca && lote && fecha && (
-            <p className="text-gray-600 mt-2">
-              Finca: <span className="font-semibold">{finca}</span> 
-              | Lote: <span className="font-semibold">{lote}</span>
-              | Fecha: <span className="font-semibold">{fechaFormateada}</span>
-            </p>
-        )
-      }
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4  mt-4 w-full container bg-white md:mx-auto md:w-2xl p-4 md:p-10 rounded-xl shadow-lg">
+        !finca || !lote ? (
+          <span className="loading loading-spinner text-[#200085] loading-lg"></span>
+        ) : (
+            <>
+              <p className="text-gray-600 mt-2">
+                Finca: <span className="font-semibold">{finca}</span> 
+                | Lote: <span className="font-semibold">{lote}</span>
+                | Fecha: <span className="font-semibold">{fechaFormateada}</span>
+              </p>
+              <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4  mt-4 w-full container bg-white md:mx-auto md:w-2xl p-4 md:p-10 rounded-xl shadow-lg">
         <div className="flex flex-col gap-2">
           <label
           className="text-black font-semibold"
@@ -194,6 +195,9 @@ const NotificationForm = () => {
           {enviando ? "Enviando..." : "Enviar"}
         </button>
       </form>
+            </>
+        )
+      }
     </div>
   );
 }

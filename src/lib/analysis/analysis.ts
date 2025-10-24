@@ -19,7 +19,7 @@ export async function postform(data: { id_poligono: string; causa: string; soluc
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        "x-api-key": import.meta.env.VITE_API_KEY,
       },
       body: JSON.stringify(dataWithUrls),
     });
@@ -39,11 +39,11 @@ export async function postform(data: { id_poligono: string; causa: string; soluc
 
 export async function getPolygon(token: string, id: string) {
   try {
-    const response = await fetch(`https://magdalena-garoo.koyeb.app/polygons`, {
+    const response = await fetch(`https://magdalena-garoo.koyeb.app/polygons/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        "x-api-key": import.meta.env.VITE_API_KEY,
       },
     });
 
@@ -52,12 +52,12 @@ export async function getPolygon(token: string, id: string) {
     }
 
     const result = await response.json();
-    const polygon = result.find((p: { _id: string; }) => p._id === id);
+    const polygon = result;
+    console.log("Fetched polygon data:", polygon);
     if (!polygon) {
       throw new Error("Polígono no encontrado");
     }
 
-    // console.log("Fetched polygon data:", polygon);
     return polygon;
   } catch (error) {
     console.error("Error al hacer fetch:", error);
