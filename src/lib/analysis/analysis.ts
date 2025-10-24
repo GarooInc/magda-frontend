@@ -37,7 +37,7 @@ export async function postform(data: { id_poligono: string; causa: string; soluc
   }
 }
 
-export async function getPolygon(token: string, id: string) {
+export async function getPolygon(id: string) {
   try {
     const response = await fetch(`https://magdalena-garoo.koyeb.app/polygons/${id}`, {
       method: "GET",

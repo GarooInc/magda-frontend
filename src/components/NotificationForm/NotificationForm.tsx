@@ -96,8 +96,7 @@ const NotificationForm = () => {
   useEffect(() => {
     if (!id_poligono) return;
       try {
-        const token = localStorage.getItem("cognitoToken") || "";
-        getPolygon(token, id_poligono).then((data) => {
+        getPolygon(id_poligono).then((data) => {
           setLote(data.lote || "");
           setFinca(data.finca || "");
         });
