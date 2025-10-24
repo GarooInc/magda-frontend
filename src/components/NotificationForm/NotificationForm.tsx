@@ -73,8 +73,7 @@ const NotificationForm = () => {
         solucion: data.solucion,
         fotos: data.fotos ? Array.from(data.fotos) : [],
       };
-      const token = localStorage.getItem("cognitoToken") || "";
-      await postform(finaldata, token);
+      await postform(finaldata);
       reset({
         id_poligono: "",
         causa: "",

@@ -1,4 +1,4 @@
-export async function postform(data: { id_poligono: string; causa: string; solucion: string; fotos: File[], fecha?: string, id_notificacion?: string }, token: string) {
+export async function postform(data: { id_poligono: string; causa: string; solucion: string; fotos: File[], fecha?: string, id_notificacion?: string }) {
   const urls = await Promise.all(
     data.fotos.map(async (file) => {
       const { upload_url, public_url } = await postImage(data.id_poligono);
