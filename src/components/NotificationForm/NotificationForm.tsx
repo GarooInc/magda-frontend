@@ -21,6 +21,7 @@ const NotificationForm = () => {
     const [previewUrls, setPreviewUrls] = useState<string[]>([]);
     const [lote, setLote] = useState<string>("");
     const [finca, setFinca] = useState<string>("");
+    const [pante, setPante] = useState<string>("");
     const [showToast, setShowToast] = useState<{ message: string; type: "success" | "error" } | null>(null);
     const fecha = new Date();
     const dia = String(fecha.getDate()).padStart(2, '0');
@@ -98,8 +99,8 @@ const NotificationForm = () => {
         getPolygon(id_poligono).then((data) => {
           setLote(data.lote || "");
           setFinca(data.finca || "");
+          setPante(data.pante || "");
         });
-        console.log("Data fetched for polygon:", { lote, finca });
       } catch (e) {
         console.error(e);
       }
@@ -124,9 +125,10 @@ const NotificationForm = () => {
           <span className="loading loading-spinner text-[#200085] loading-lg"></span>
         ) : (
             <>
-              <p className="text-gray-600 mt-2">
+              <p className="text-gray-600 mt-2 text-center">
                 Finca: <span className="font-semibold">{finca}</span> 
                 | Lote: <span className="font-semibold">{lote}</span>
+                | Pante: <span className="font-semibold">{pante}</span>
                 | Fecha: <span className="font-semibold">{fechaFormateada}</span>
               </p>
               <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4  mt-4 w-full container bg-white md:mx-auto md:w-2xl p-4 md:p-10 rounded-xl shadow-lg">
